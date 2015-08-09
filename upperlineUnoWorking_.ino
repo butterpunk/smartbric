@@ -10,7 +10,7 @@
 // Connect CLK/MISO/MOSI to hardware SPI
 // e.g. On UNO & compatible: CLK = 13, MISO = 12, MOSI = 11
 #define ADAFRUITBLE_REQ 10
-#define ADAFRUITBLE_RDY 3     // This should be an interrupt pin, on Uno thats #2 or #3
+#define ADAFRUITBLE_RDY 2     // This should be an interrupt pin, on Uno thats #2 or #3
 #define ADAFRUITBLE_RST 9
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
@@ -80,42 +80,15 @@ void loop()
     }
 
     // Next up, see if we have any data to get from the Serial console
-
-    if (Serial.available()) {
-    
    sensors_event_t event;
   bno.getEvent(&event);
-    char tempCharX[10];
-    String tempStringX="";
-    dtostrf(event.pressure.x, 5, 3, tempCharX);
-    for(int i = 0; i<sizeof(tempCharX); i++)
-    {
-      tempStringX+=tempCharX[i];
-    }
-    Serial.println(tempStringX);
+    if (Serial.available()) {
+    
 
-     char tempCharY[10];
-    String tempStringY="";
-    dtostrf(event.pressure.y, 5, 3, tempCharY);
-    for(int i = 0; i<sizeof(tempCharY); i++)
-    {
-      tempStringY+=tempCharY[i];
-    }
-    Serial.println(tempStringY);
-     
-     char tempCharZ[10];
-    String tempStringZ="";
-    dtostrf(event.pressure.z, 5, 3, tempCharZ);
-    for(int i = 0; i<sizeof(tempCharZ); i++)
-    {
-      tempStringZ+=tempCharZ[i];
-    }
-    Serial.println(tempStringZ);
-
-    String tempString="X:" + tempStringX + "Y:" + tempStringY + "Z: "+ tempStringZ;
+   
       // Read a line from Serial
       Serial.setTimeout(100); // 100 millisecond timeout
-      String s = tempString;//Serial.readString();
+      String s = String(event.orientation.x);
 
       // We need to convert the line to bytes, no more than 20 at this time
       uint8_t sendbuffer[20];
@@ -131,15 +104,6 @@ void loop()
 
  
   /* Display the results (barometric pressure is measure in hPa)*/ 
-  if (event.pressure)
-  {
-    /* Display atmospheric pressure in hPa*/ 
-
-    //Serial.print("Pressure: "); Serial.print(event.pressure); Serial.println(" hPa");
-  }
-  else
-  {
-    Serial.println("Sensor error");
-  } 
-  delay(700);
+ 
+ 
 }
